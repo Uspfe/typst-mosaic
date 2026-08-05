@@ -17,6 +17,18 @@ This figure is itself rendered with `display-content-tree` (panels 1–2) and
 cd packages/mosaic && typst compile --root . docs/figure.typ docs/how-it-works.png --format png --ppi 300
 ```
 
+### The sizing model
+
+![Three panels annotated with dimension lines: a leaf's w = a(h - c_h) + c_w relation with a and h/w labeled; a horizontal group where widths add (A = sum of a_i) and the gap becomes the group's constant width offset C_w; a vertical group where heights add reciprocally (A = 1 / sum of 1/a_i) and the gap becomes the constant height offset C_h.](docs/model.png)
+
+This is the "Model" section documented at the top of `src/layout.typ`, with each
+symbol (`a`, `c_h`, `c_w`, `gap`) drawn as an actual measured length instead of left
+abstract. See `docs/model.typ`, regenerate it with:
+
+```bash
+cd packages/mosaic && typst compile --root . docs/model.typ docs/model.png --format png --ppi 300
+```
+
 ## Usage
 
 ```typ
