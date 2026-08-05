@@ -1,0 +1,7 @@
+[package]
+name = "mosaic"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Uspfe"]
+description = "Aspect-ratio-preserving grid layouts for photo mosaics, with automatic layout search."
+compiler = "0.12.0"
