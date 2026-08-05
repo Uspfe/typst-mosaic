@@ -1,47 +1,70 @@
 # mosaic
 
-Aspect-ratio-preserving grid layouts for photo mosaics.
+Aspect-ratio-preserving grid layouts for (mostly photo) mosaics.
+
+![Six items — two photos, three placeholders, and a fixed-height caption strip — auto-laid-out to fill the available box while each keeps its own aspect ratio.](docs/figure1.svg)
+
 
 Lays out grids of images (or arbitrary content) that fill an available box while
 preserving every element's aspect ratio and keeping uniform gaps, and lets you either
 build the layout tree yourself or have one searched for automatically.
 
-## How it works
-
-![Three panels: leaves keep their own aspect ratio at a shared row height; a horizontal group's children stack vertically inside it (and vice versa) with a uniform gap at every level; display-auto-layout searches recursive splits for the one whose areas best match given weights.](docs/how-it-works.png)
-
-This figure is itself rendered with `display-content-tree` (panels 1–2) and
-`display-auto-layout` (panel 3) — see `docs/figure.typ`, regenerate it with:
-
-```bash
-cd packages/mosaic && typst compile --root . docs/figure.typ docs/how-it-works.png --format png --ppi 300
-```
-
-### The sizing model
-
-![Three panels annotated with dimension lines: a leaf's w = a(h - c_h) + c_w relation with a and h/w labeled; a horizontal group where widths add (A = sum of a_i) and the gap becomes the group's constant width offset C_w; a vertical group where heights add reciprocally (A = 1 / sum of 1/a_i) and the gap becomes the constant height offset C_h.](docs/model.png)
-
-This is the "Model" section documented at the top of `src/layout.typ`, with each
-symbol (`a`, `c_h`, `c_w`, `gap`) drawn as an actual measured length instead of left
-abstract. See `docs/model.typ`, regenerate it with:
-
-```bash
-cd packages/mosaic && typst compile --root . docs/model.typ docs/model.png --format png --ppi 300
-```
-
 ## Usage
 
-```typ
-#import "@local/mosaic:0.1.0": *
 
-#context box(width: 100%, height: 6cm)[
-  #display-content-tree(
-    (image("a.jpg"), image("b.jpg")),
-    axis: "horizontal",
-    gap: 0.5em,
-  )
-]
+#### Auto-Layout To Fill Availble Space While Preserving Aspect Ratios
+
+```typ
+display-auto-layout(
+  (
+    (body: image("a.jpg"), weight: 3), # 
+    image("b.jpg"),
+    image("c.jpg"),
+    (body: image("d.jpg"), weight: 2),
+  ),
+  gap: 0.6em,
+  selector: "1", // best-scoring layout
+  // selector: "1.", "1..", ... — equally well-scored reorderings of the same layout
+  // selector: "2", "3", ...   — next-best layouts, in descending order of score
+)
 ```
+
+![display-auto-layout searches recursive splits for the one whose areas best match given weights.](docs/figure3.svg)
+
+#### Layouts can be specified manually
+
+A layout consits of alternating nested horzontally and vertically stacked containers, specified by nested arrays. To specify additional parameters, see [Manual layout: `display-content-tree`](#manual-layout-display-content-tree) below.
+
+```typ
+display-content-tree(
+  (
+    image("a.jpg"),
+    (
+      image("b.jpg"),
+      (
+        image("c.jpg"),
+        image("d.jpg"),
+      ),
+    ),
+  ),
+  axis: "horizontal",
+  gap: 0.6em,
+)
+```
+
+![A horizontal group's children stack vertically inside it (and vice versa) with a uniform gap at every level.](docs/figure2.svg)
+
+These figures are themselves rendered with `display-auto-layout` (figures 1 and 3) and
+`display-content-tree` (figure 2) — see `docs/figure1.typ`, `docs/figure2.typ`,
+`docs/figure3.typ`, regenerate them with:
+
+```bash
+cd packages/mosaic && typst compile --root . docs/figure1.typ docs/figure1.svg --format svg
+cd packages/mosaic && typst compile --root . docs/figure2.typ docs/figure2.svg --format svg
+cd packages/mosaic && typst compile --root . docs/figure3.typ docs/figure3.svg --format svg
+```
+
+## Details
 
 ### Manual layout: `display-content-tree`
 
@@ -93,15 +116,6 @@ weights, and `max-items` (default `8`) caps the item count, since the number of 
 trees grows very fast. See `test/auto-layout.typ` for examples of weights, ranking, and
 stepping through symmetric variants.
 
-## Local installation
+## Limitations
 
-This package isn't published to the Typst registry. To resolve it as `@local/mosaic:0.1.0`
-(e.g. for editor/LSP support), symlink it into your local package directory:
-
-```bash
-mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/typst/packages/local/mosaic"
-ln -s "$(pwd)/packages/mosaic" "${XDG_DATA_HOME:-$HOME/.local/share}/typst/packages/local/mosaic/0.1.0"
-```
-
-Within this repo, `main.typ` imports it by relative path instead, so this step is optional
-and only needed for editor tooling.
+The true behaviour of text content is not accounted for. Text requires a constant/miniumum _area_ constraint instead of the here implemented constant _aspect_ constraint. However, text can still be inserted with workarounds, which may need some manul tuning after the automatic layout creation.
