@@ -16,8 +16,8 @@
   height: 8cm,
   context display-auto-layout(
     (
-      (body: image("../assets/20250811_091019.jpg"), weight: 5),
-      image("../assets/20250811_092332_v1.jpg"),
+      (body: image("../assets/placeholder-portrait.jpg"), weight: 5),
+      image("../assets/placeholder-landscape.jpg"),
       swatch(palette.at(2), "aspect 4/5", aspect: 4 / 5),
       swatch(palette.at(3), "aspect 3/2", aspect: 3 / 2),
       swatch(palette.at(4), "aspect 1/1", aspect: 1 / 1),

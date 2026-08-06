@@ -34,7 +34,7 @@ context display-auto-layout(
 
 #### Manual-Layout: Manually specify the course arrangment and automatically compute the cell sizes
 
-A layout consits of alternating nested horzontally and vertically stacked containers, specified by nested arrays. To specify additional parameters, see [Manual layout: `display-content-tree`](#manual-layout-display-content-tree) below.
+A layout consits of alternating nested horzontally and vertically stacked containers, specified by nested arrays. To specify additional parameters, see [`display-content-tree`](#display-content-treeitems-axis-horizontal-gap-05em) below.
 
 ```typ
 context display-content-tree(
@@ -67,19 +67,32 @@ cd packages/mosaic && typst compile --root . docs/figure3.typ docs/figure3.svg -
 
 ## Details
 
-### Manual layout: `display-content-tree`
+### Item format
 
-Give it a nested array describing the tree; the axis (`"horizontal"`/`"vertical"`)
-alternates automatically at every nesting level starting from the `axis` you pass in.
-Each item in the array is one of:
+Both functions take items in the same format. Each item is either plain `content` or a
+`dictionary`:
 
 - `content` — a leaf with its aspect ratio auto-measured (e.g. `image("a.jpg")`)
 - `(body: ..., aspect: float)` — a leaf with an explicit aspect ratio
 - `(body: ..., aspect: 0, constant-size: length)` — a fixed-size leaf; `constant-size`
   becomes the width in a horizontal row or the height in a vertical stack
-- `(body: ..., stretchable_: true)` — a leaf that absorbs any leftover space along its
+- `(body: ..., stretchable_: true)` — a leaf that absorbs leftover space along its
   parent's axis (combinable with `constant-size` for a minimum size)
-- a nested `array` — a sub-group, whose axis is the opposite of its parent's
+- for `display-auto-layout` only: add `weight: float` (default `1`) to any of the above
+  to give that item more/less space relative to the others
+- for `display-content-tree` only: a nested `array` is a sub-group, whose axis is the
+  opposite of its parent's
+
+### `display-content-tree(items, axis: "horizontal", gap: 0.5em)`
+
+Manually specify a nested array describing the tree; cell sizes are computed
+automatically to fill the available space while preserving aspect ratios.
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `items` | — | Nested array describing the tree (see [Item format](#item-format) above). |
+| `axis` | `"horizontal"` | Axis of the top-level group; alternates automatically at every nesting level below it. |
+| `gap` | `0.5em` | Uniform gap between siblings at every level. |
 
 For finer control than the array shorthand gives you — different gaps per level, or
 assembling a tree piecemeal — build content-dicts directly with `make-content-dict` /
@@ -87,10 +100,9 @@ assembling a tree piecemeal — build content-dicts directly with `make-content-
 `fit-content-dict` yourself. See `test/layout.typ` for worked examples of every case
 above, including constant-size and stretchable elements in nested layouts.
 
-### Automatic layout: `display-auto-layout`
+### `display-auto-layout(items, gap: 0.5em, selector: "1", fill-weight: 1.0, max-items: 8)`
 
-Give it a *flat* list of items (same per-item dict format as above, plus an optional
-`weight: float`, default `1`) and it enumerates every way to recursively split them into
+Give it a *flat* list of items and it enumerates every way to recursively split them into
 an alternating horizontal/vertical tree, scores each one by how closely each item's
 rendered area matches its weight (plus a reward for filling the available box), and
 renders the best-scoring tree:
@@ -109,13 +121,16 @@ renders the best-scoring tree:
 ]
 ```
 
-`selector` picks which ranked tree to render — `"1"` is the best-scoring, `"2"` the
-second-best, and so on; trailing dots (`"1."`, `"1.."`) step through equal-cost
-reorderings of the same tree (e.g. mirroring which side the odd-one-out sits on).
-`fill-weight` controls how strongly page-fill is rewarded relative to matching the given
-weights, and `max-items` (default `8`) caps the item count, since the number of possible
-trees grows very fast. See `test/auto-layout.typ` for examples of weights, ranking, and
-stepping through symmetric variants.
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `items` | — | Flat array of items (see [Item format](#item-format) above). |
+| `gap` | `0.5em` | Uniform gap between siblings at every level. |
+| `selector` | `"1"` | Which ranked tree to render — `"1"` is the best-scoring, `"2"` the second-best, and so on; trailing dots (`"1."`, `"1.."`) step through equal-cost reorderings of the same tree (e.g. mirroring which side the odd-one-out sits on). |
+| `fill-weight` | `1.0` | How strongly page-fill is rewarded relative to matching the given `weight`s. |
+| `max-items` | `8` | Caps the item count, since the number of possible trees grows very fast. |
+
+See `test/auto-layout.typ` for examples of weights, ranking, and stepping through
+symmetric variants.
 
 ## Limitations
 

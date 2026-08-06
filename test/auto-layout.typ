@@ -1,6 +1,6 @@
 #import "../src/auto-layout.typ": *
 
-#let img = "../assets/20250811_092332_v1.jpg"
+#let img = "../assets/placeholder-landscape.jpg"
 
 #set box(stroke: red)
 
