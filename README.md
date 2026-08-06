@@ -15,6 +15,8 @@ build the layout tree yourself or have one searched for automatically.
 #### Auto-Layout: Automatically find optimal arrangement and compute cell sizes to fill available space while preserving aspect ratios
 
 ```typ
+#import "@preview/mosaic:0.1.0": *
+
 context display-auto-layout(
   (
     image("a.jpg"),
@@ -37,6 +39,8 @@ context display-auto-layout(
 A layout consists of alternating nested horizontally and vertically stacked containers, specified by nested arrays. To specify additional parameters, see [`display-content-tree`](#display-content-treeitems-axis-horizontal-gap-05em) below.
 
 ```typ
+#import "@preview/mosaic:0.1.0": *
+
 context display-content-tree(
   (
     image("a.jpg"), // top level
@@ -60,9 +64,9 @@ These figures are themselves rendered with `display-auto-layout` (figures 1 and 
 `docs/figure3.typ`, regenerate them with:
 
 ```bash
-cd packages/mosaic && typst compile --root . docs/figure1.typ docs/figure1.svg --format svg
-cd packages/mosaic && typst compile --root . docs/figure2.typ docs/figure2.svg --format svg
-cd packages/mosaic && typst compile --root . docs/figure3.typ docs/figure3.svg --format svg
+typst compile --root . docs/figure1.typ docs/figure1.svg --format svg
+typst compile --root . docs/figure2.typ docs/figure2.svg --format svg
+typst compile --root . docs/figure3.typ docs/figure3.svg --format svg
 ```
 
 ## Details
@@ -108,6 +112,8 @@ rendered area matches its weight (plus a reward for filling the available box), 
 renders the best-scoring tree:
 
 ```typ
+#import "@preview/mosaic:0.1.0": *
+
 #context box(width: 100%, height: 5cm)[
   #display-auto-layout(
     (

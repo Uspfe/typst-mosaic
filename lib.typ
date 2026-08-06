@@ -17,5 +17,5 @@
 /// ]
 /// ```)
 
-#import "src/layout.typ": *
+#import "src/layout.typ": make-content-dict, add-body-to-content-dict, resolve-aspect, resolve-stretchable, fit-content-dict, parse-content-tree, display-content-tree
 #import "src/auto-layout.typ": display-auto-layout
