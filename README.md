@@ -12,7 +12,7 @@ build the layout tree yourself or have one searched for automatically.
 ## Usage
 
 
-#### Auto-Layout: Automatically find optimal arrangment and compute cell sizes to fill availble space while preserving aspect ratios
+#### Auto-Layout: Automatically find optimal arrangement and compute cell sizes to fill available space while preserving aspect ratios
 
 ```typ
 context display-auto-layout(
@@ -32,9 +32,9 @@ context display-auto-layout(
 
 ![display-auto-layout searches recursive splits for the one whose areas best match given weights.](docs/figure3.svg)
 
-#### Manual-Layout: Manually specify the course arrangment and automatically compute the cell sizes
+#### Manual-Layout: Manually specify the coarse arrangement and automatically compute the cell sizes
 
-A layout consits of alternating nested horzontally and vertically stacked containers, specified by nested arrays. To specify additional parameters, see [`display-content-tree`](#display-content-treeitems-axis-horizontal-gap-05em) below.
+A layout consists of alternating nested horizontally and vertically stacked containers, specified by nested arrays. To specify additional parameters, see [`display-content-tree`](#display-content-treeitems-axis-horizontal-gap-05em) below.
 
 ```typ
 context display-content-tree(
@@ -134,4 +134,4 @@ symmetric variants.
 
 ## Limitations
 
-The true behaviour of text content is not accounted for. Text requires a constant/miniumum _area_ constraint instead of the here implemented constant _aspect_ constraint. However, text can still be inserted with workarounds, which may need some manul tuning after the automatic layout creation.
+The true behaviour of text content is not accounted for. Text requires a constant/minimum _area_ constraint instead of the constant _aspect_ constraint implemented here. However, text can still be inserted with workarounds, which may need some manual tuning after the automatic layout creation.
