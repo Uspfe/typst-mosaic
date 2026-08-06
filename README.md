@@ -1,6 +1,6 @@
 # mosaic
 
-Aspect-ratio-preserving grid layouts for (mostly photo) mosaics.
+Automatic aspect-ratio-preserving grid layouts for (mostly photo) mosaics.
 
 ![Six items — two photos, three placeholders, and a fixed-height caption strip — auto-laid-out to fill the available box while each keeps its own aspect ratio.](docs/figure1.svg)
 
@@ -12,7 +12,7 @@ build the layout tree yourself or have one searched for automatically.
 ## Usage
 
 
-#### Auto-Layout To Fill Availble Space While Preserving Aspect Ratios
+#### Auto-Layout: Automatically find optimal arrangment and compute cell sizes to fill availble space while preserving aspect ratios
 
 ```typ
 context display-auto-layout(
@@ -32,18 +32,18 @@ context display-auto-layout(
 
 ![display-auto-layout searches recursive splits for the one whose areas best match given weights.](docs/figure3.svg)
 
-#### Layouts can be specified manually
+#### Manual-Layout: Manually specify the course arrangment and automatically compute the cell sizes
 
 A layout consits of alternating nested horzontally and vertically stacked containers, specified by nested arrays. To specify additional parameters, see [Manual layout: `display-content-tree`](#manual-layout-display-content-tree) below.
 
 ```typ
-display-content-tree(
+context display-content-tree(
   (
-    image("a.jpg"),
+    image("a.jpg"), // top level
     (
-      image("b.jpg"),
+      image("b.jpg"), // sub-group
       (
-        image("c.jpg"),
+        image("c.jpg"), // subsub-group
         image("d.jpg"),
       ),
     ),
