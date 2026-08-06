@@ -15,17 +15,18 @@ build the layout tree yourself or have one searched for automatically.
 #### Auto-Layout To Fill Availble Space While Preserving Aspect Ratios
 
 ```typ
-display-auto-layout(
+context display-auto-layout(
   (
-    (body: image("a.jpg"), weight: 3), # 
+    image("a.jpg"),
     image("b.jpg"),
     image("c.jpg"),
-    (body: image("d.jpg"), weight: 2),
+    (body: image("d.jpg"), weight: 2),                    // specify a weight (default: 1) to give this element more space in the auto-layout
+    // (body: [Some Text], aspect: 0, constant-size: 3cm) // work-around for text or other content which can't be scaled the same way as images
   ),
   gap: 0.6em,
-  selector: "1", // best-scoring layout
-  // selector: "1.", "1..", ... — equally well-scored reorderings of the same layout
-  // selector: "2", "3", ...   — next-best layouts, in descending order of score
+  selector: "1",                // best-scoring layout
+  // selector: "1.", "1..", ... // equally well-scored reorderings of the same layout
+  // selector: "2", "3", ...    // next-best layouts, in descending order of score
 )
 ```
 
