@@ -17,7 +17,7 @@ build the layout tree yourself or have one searched for automatically.
 ```typ
 #import "@preview/automosaic:0.1.0": *
 
-context display-auto-layout(
+#context display-auto-layout(
   (
     image("a.jpg"),
     image("b.jpg"),
@@ -42,7 +42,7 @@ A layout consists of alternating nested horizontally and vertically stacked cont
 ```typ
 #import "@preview/automosaic:0.1.0": *
 
-context display-content-tree(
+#context display-content-tree(
   (
     image("a.jpg"), // top level
     (
